@@ -1,0 +1,51 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+*.egg
+
+# 虚拟环境
+venv/
+.venv/
+
+# 敏感配置文件
+.env
+llm_config.json
+.backend_port
+.vite_port
+
+# 数据库
+*.db
+*.sqlite3
+
+# 上传和输出目录
+uploads/
+outputs/
+
+# 模型缓存
+models/
+
+# Node.js
+node_modules/
+frontend/dist/
+
+# Electron 构建产物
+frontend/electron-dist/
+frontend/dist-builder/
+frontend/build-exe.bat
+
+# IDE
+.idea/
+.vscode/
+.trae/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# 日志
+*.log

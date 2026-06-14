@@ -1,0 +1,30 @@
+# TransAnything 后端依赖
+# 安装方式: pip install -r requirements.txt
+# 注意: paddlepaddle-gpu 需要 NVIDIA GPU + CUDA，无 GPU 请改用 paddlepaddle
+
+# ===== Web框架 =====
+fastapi==0.115.0
+uvicorn==0.30.0
+python-multipart==0.0.9
+pydantic-settings==2.14.1
+aiosqlite==0.20.0
+
+# ===== 文件解析引擎 =====
+pymupdf==1.24.0
+python-docx==1.2.0
+openpyxl==3.1.5
+markitdown==0.1.6
+kreuzberg==4.9.7
+
+# ===== LLM =====
+openai==2.40.0
+
+# ===== GPU OCR引擎（需要NVIDIA GPU）=====
+paddlepaddle-gpu==3.3.1
+paddleocr==3.7.0
+paddlex==3.7.1
+modelscope==1.37.1
+
+# ===== MinerU（需要NVIDIA GPU）=====
+mineru==3.3.1
+mineru-vl-utils==1.0.5

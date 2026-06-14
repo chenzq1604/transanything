@@ -1,0 +1,210 @@
+/* ========================================
+ * TransAnything 全局样式
+ * ======================================== */
+
+/* 重置与基础 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #app {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* 应用布局 */
+.app-layout {
+  height: 100%;
+}
+
+/* 顶部导航 */
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  background: #001529;
+  height: 56px;
+  line-height: 56px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 10;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header-icon {
+  font-size: 24px;
+  color: #1890ff;
+}
+
+.header-title {
+  color: #fff;
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.header-subtitle {
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+}
+
+/* 内容区域 */
+.app-content {
+  height: calc(100% - 56px);
+  overflow: hidden;
+}
+
+/* 主内容容器 - flex布局 */
+.content-wrapper {
+  display: flex;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* 文件侧边栏 */
+.file-sider {
+  flex-shrink: 0;
+  border-right: 1px solid #f0f0f0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+}
+
+.sider-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid #f0f0f0;
+  background: #fafafa;
+}
+
+.sider-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.85);
+}
+
+/* 拖拽分隔条 */
+.resize-handle {
+  width: 6px;
+  flex-shrink: 0;
+  cursor: col-resize;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  transition: background 0.2s;
+  position: relative;
+}
+
+.resize-handle:hover {
+  background: #e6f4ff;
+}
+
+.resize-handle:active {
+  background: #bae0ff;
+}
+
+.resize-line {
+  width: 2px;
+  height: 32px;
+  background: #d9d9d9;
+  border-radius: 1px;
+  transition: background 0.2s;
+}
+
+.resize-handle:hover .resize-line {
+  background: #1890ff;
+}
+
+/* 对比视图区域 */
+.compare-area {
+  flex: 1;
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  background: #f5f5f5;
+  min-width: 0;
+}
+
+.sider-expand-btn {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 5;
+  background: #fff;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 空状态 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 40px;
+}
+
+.upload-drag-area {
+  width: 100%;
+  max-width: 600px;
+}
+
+.upload-drag-area .ant-upload-drag {
+  padding: 40px 20px;
+  border-radius: 8px;
+}
+
+.upload-drag-area .ant-upload-drag-icon .anticon {
+  font-size: 48px;
+  color: #1890ff;
+}
+
+.upload-drag-area .ant-upload-text {
+  font-size: 16px;
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.upload-drag-area .ant-upload-hint {
+  font-size: 13px;
+  color: rgba(0, 0, 0, 0.35);
+}
+
+/* 滚动条美化 */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.25);
+}

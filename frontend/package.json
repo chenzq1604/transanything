@@ -1,0 +1,83 @@
+{
+  "name": "transanything",
+  "version": "1.0.0",
+  "description": "TransAnything - 文件转Markdown平台",
+  "main": "electron/main.js",
+  "author": "TransAnything",
+  "license": "MIT",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "electron:dev": "vite build && electron .",
+    "electron:build": "vite build && electron-builder --win nsis"
+  },
+  "dependencies": {
+    "@ant-design/icons-vue": "^7.0.1",
+    "ant-design-vue": "^4.2.6",
+    "axios": "^1.7.0",
+    "highlight.js": "^11.11.1",
+    "mammoth": "^1.12.0",
+    "marked": "^18.0.5",
+    "pdfjs-dist": "4.9.155",
+    "vue": "^3.4.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.0",
+    "electron": "^42.4.0",
+    "electron-builder": "^26.0.0",
+    "rcedit": "^5.0.1",
+    "vite": "^5.4.0"
+  },
+  "build": {
+    "appId": "com.transanything.app",
+    "productName": "TransAnything",
+    "directories": {
+      "output": "D:/transanything-build"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "../backend/app",
+        "to": "backend/app",
+        "filter": [
+          "**/*.py",
+          "!**/__pycache__/**"
+        ]
+      },
+      {
+        "from": "../backend/requirements.txt",
+        "to": "backend/requirements.txt"
+      }
+    ],
+    "win": {
+      "icon": "public/icon.ico",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "artifactName": "TransAnything-Setup-${version}.${ext}",
+      "installerLanguages": [
+        "zh_CN"
+      ],
+      "language": 2052,
+      "installerIcon": "public/icon.ico",
+      "uninstallerIcon": "public/icon.ico",
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "TransAnything"
+    }
+  }
+}
