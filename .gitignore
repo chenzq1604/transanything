@@ -35,6 +35,14 @@ frontend/dist/
 frontend/electron-dist/
 frontend/dist-builder/
 frontend/build-exe.bat
+frontend/release/
+frontend/temp_app.asar
+
+# 临时wheel包
+tmp_wheel/
+
+# 临时版本标记
+1.17.0
 
 # IDE
 .idea/
