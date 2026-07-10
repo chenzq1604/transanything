@@ -98,28 +98,10 @@ const testResult = ref(null)
 /** 常用模型预设 */
 const MODEL_PRESETS = [
   {
-    name: '火山方舟 - 豆包视觉',
-    desc: 'doubao-vision-pro，支持图片识别',
-    base_url: 'https://ark.cn-beijing.volces.com/api/v3',
-    model: 'doubao-vision-pro-32k',
-  },
-  {
-    name: '火山方舟 - 豆包文本',
-    desc: 'doubao-pro，仅文本优化',
-    base_url: 'https://ark.cn-beijing.volces.com/api/v3',
-    model: 'doubao-pro-32k',
-  },
-  {
-    name: 'OpenAI - GPT-4o',
-    desc: '支持图片识别，需要海外代理',
-    base_url: 'https://api.openai.com/v1',
-    model: 'gpt-4o',
-  },
-  {
-    name: 'DeepSeek - Chat',
-    desc: '仅文本优化，性价比高',
-    base_url: 'https://api.deepseek.com/v1',
-    model: 'deepseek-chat',
+    name: '火山方舟Coding plan',
+    desc: 'doubao-seed-2.0-pro，支持图片识别',
+    base_url: 'https://ark.cn-beijing.volces.com/api/coding/v3',
+    model: 'doubao-seed-2.0-pro',
   },
 ]
 

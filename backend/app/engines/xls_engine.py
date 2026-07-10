@@ -18,7 +18,7 @@ class XlsEngine(BaseEngine):
         """返回Excel引擎支持的扩展名"""
         return [".xls", ".xlsx"]
 
-    async def convert(self, file_path: str) -> str:
+    async def convert(self, file_path: str, file_id: str | None = None) -> str:
         """
         将Excel文件转换为Markdown格式
 

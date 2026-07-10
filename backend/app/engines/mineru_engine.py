@@ -85,6 +85,9 @@ class MineruEngine(BaseEngine):
 
         markdown = md_file.read_text(encoding="utf-8")
 
+        # 清理MinerU输出的HTML标签（sub/sup/i/b等），只保留标签内的文字
+        markdown = self._clean_html_tags(markdown)
+
         # 从content_list.json中提取regions数据
         content_list_file = output_dir / pdf_path.stem / parse_method / f"{pdf_path.stem}_content_list.json"
         if content_list_file.exists():
@@ -97,6 +100,31 @@ class MineruEngine(BaseEngine):
         # 将regions数据附到markdown末尾（不可见JSON，前端解析后移除）
         if self._last_regions:
             markdown += f"\n\n<!-- REGIONS:{json.dumps(self._last_regions, ensure_ascii=False)} -->"
+
+        return markdown
+
+    def _clean_html_tags(self, markdown: str) -> str:
+        """
+        清理MinerU输出中的HTML标签，只保留标签内的文字内容
+
+        MinerU会将下标、上标、斜体、粗体等用HTML标签包裹，
+        这些标签在标准Markdown渲染器中会显示为原始文本，影响阅读。
+
+        清理的标签: sub, sup, i, b, em, strong, small, span
+
+        Args:
+            markdown: 原始Markdown文本
+
+        Returns:
+            清理HTML标签后的Markdown文本
+        """
+        # 移除成对的HTML标签，保留标签内的文字
+        # 匹配 <sub>文字</sub> 这类成对标签，只保留"文字"
+        tag_pattern = re.compile(
+            r'</?(?:sub|sup|i|b|em|strong|small|span)\b[^>]*>',
+            re.IGNORECASE,
+        )
+        markdown = tag_pattern.sub('', markdown)
 
         return markdown
 

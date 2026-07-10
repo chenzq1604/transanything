@@ -18,7 +18,7 @@ class DocxEngine(BaseEngine):
         """返回DOCX引擎支持的扩展名"""
         return [".docx"]
 
-    async def convert(self, file_path: str) -> str:
+    async def convert(self, file_path: str, file_id: str | None = None) -> str:
         """
         将DOCX文件转换为Markdown格式
 

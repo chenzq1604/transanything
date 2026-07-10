@@ -28,12 +28,13 @@ class MarkitdownEngine(BaseEngine):
                 ".txt", ".md", ".csv", ".html", ".htm", ".png", ".jpg", ".jpeg",
                 ".mp3", ".wav", ".mp4"]
 
-    async def convert(self, file_path: str) -> str:
+    async def convert(self, file_path: str, file_id: str | None = None) -> str:
         """
         使用MarkItDown将文件转换为Markdown格式（异步包装）
 
         Args:
             file_path: 源文件路径
+            file_id: 文件ID（可选）
 
         Returns:
             转换后的Markdown文本

@@ -64,7 +64,7 @@ export async function getFileList() {
  * @param {string} engineType - 引擎类型：pymupdf/markitdown/paddleocr/llm
  * @returns {Promise<Object>} 转换结果
  */
-export function convertFile(fileId, useLlmOptimize = true, engineType = 'auto') {
+export function convertFile(fileId, useLlmOptimize = true, engineType = 'markitdown') {
   return request.post(`/convert/${fileId}`, null, {
     params: { use_llm_optimize: useLlmOptimize, engine_type: engineType },
   })

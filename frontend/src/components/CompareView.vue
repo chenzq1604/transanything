@@ -15,7 +15,7 @@
       <div class="toolbar-right">
         <!-- 识别操作组 -->
         <a-select v-model:value="engineType" size="small" style="width: 200px">
-          <a-select-option v-for="et in ALL_ENGINE_TYPES" :key="et" :value="et" :disabled="!engineAvailability[et]?.available">
+          <a-select-option v-for="et in availableEngineTypes" :key="et" :value="et" :disabled="!engineAvailability[et]?.available">
             <a-tooltip v-if="!engineAvailability[et]?.available" :title="engineAvailability[et]?.reason || '不可用'" placement="right">
               <span style="color: rgba(0,0,0,0.25)">{{ ENGINE_NAMES[et] }} (不可用)</span>
             </a-tooltip>
@@ -428,6 +428,9 @@ const ENGINE_DESCRIPTIONS = {
 /** 所有可选引擎列表 */
 const ALL_ENGINE_TYPES = ['markitdown', 'paddleocr', 'ppstructure', 'ppchatocr', 'mineru', 'llm']
 
+/** 仅支持PDF的引擎 */
+const PDF_ONLY_ENGINES = ['paddleocr', 'ppstructure', 'ppchatocr', 'mineru', 'llm']
+
 const props = defineProps({
   fileId: { type: [String, Number], required: true },
   fileType: { type: String, default: '' },
@@ -451,6 +454,11 @@ watch(() => props.fileId, (newFileId, oldFileId) => {
     hiddenEngineTypes.value = new Set()
     leftPaneHidden.value = false
     leftPaneWidth.value = 600
+    // 如果当前选中的引擎不支持新文件类型，重置为markitdown
+    const isPdf = (props.fileType || '').replace(/^\./, '') === 'pdf'
+    if (!isPdf && PDF_ONLY_ENGINES.includes(engineType.value)) {
+      engineType.value = 'markitdown'
+    }
   }
 })
 
@@ -694,12 +702,23 @@ const bodyInnerWidth = computed(() => {
 })
 
 /**
- * 可添加的引擎列表（排除已添加的）
+ * 根据文件类型过滤的可用引擎列表
+ * PDF专用引擎仅对.pdf文件显示
+ */
+const availableEngineTypes = computed(() => {
+  const isPdf = normalizedType.value === 'pdf'
+  return ALL_ENGINE_TYPES.filter(et => isPdf || !PDF_ONLY_ENGINES.includes(et))
+})
+
+/**
+ * 可添加的引擎列表（排除已添加的，根据文件类型过滤）
  */
 const availableEnginesToAdd = computed(() => {
   const existingTypes = new Set(engineColumns.value.map(c => c.engineType))
+  const isPdf = normalizedType.value === 'pdf'
   return ALL_ENGINE_TYPES
     .filter(et => !existingTypes.has(et))
+    .filter(et => isPdf || !PDF_ONLY_ENGINES.includes(et))
     .map(et => ({
       value: et,
       label: ENGINE_NAMES[et],
@@ -1267,7 +1286,7 @@ function handleBatchReconvert() {
  * 单引擎识别（手动识别下拉框选择的引擎）
  */
 function handleReconvert() {
-  const selectedType = engineType.value
+  const selectedType = engineType.value || 'markitdown'
   // 检查LLM相关提示
   if (selectedType === 'llm' && !llmStatus.value.connection_ok) {
     message.warning('LLM连接不可用，图片识别引擎可能失败，请先配置大模型')
@@ -1369,8 +1388,13 @@ async function pollProgress(fileId) {
       for (const [etype, eprog] of Object.entries(data.engines)) {
         const col = engineColumns.value.find(c => c.engineType === etype)
         if (col) {
+          const prevStatus = col.status
           col.status = eprog.status || col.status
           col.percentage = eprog.percentage || 0
+          // 单个引擎刚完成时，立即加载该引擎的结果（不等全部完成）
+          if (prevStatus !== 'completed' && eprog.status === 'completed' && !col.markdown) {
+            refreshSingleEngineResult(fileId, etype)
+          }
         }
       }
     }
@@ -1421,6 +1445,36 @@ async function refreshEngineResults(fileId) {
     }
   } catch {
     // 刷新失败不影响主流程
+  }
+}
+
+/**
+ * 加载单个引擎的转换结果（不等全部完成）
+ * @param {string} fileId - 文件ID
+ * @param {string} engineType - 引擎类型
+ */
+async function refreshSingleEngineResult(fileId, engineType) {
+  try {
+    const res = await api.getEngineResults(fileId)
+    if (res && res.engine_results) {
+      const er = res.engine_results.find(r => r.engine_type === engineType)
+      if (er) {
+        const col = engineColumns.value.find(c => c.engineType === engineType)
+        if (col) {
+          if (er.markdown_content) {
+            col.markdown = stripRegions(er.markdown_content)
+            col.regions = parseRegions(er.markdown_content)
+          }
+          col.status = er.status || col.status
+          col.duration = er.duration || col.duration
+          col.charCount = er.char_count || col.charCount
+          col.lineCount = er.line_count || col.lineCount
+          col.errorMessage = er.error_message || col.errorMessage
+        }
+      }
+    }
+  } catch {
+    // 单引擎刷新失败不影响主流程
   }
 }
 

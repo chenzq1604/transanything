@@ -30,7 +30,7 @@ class PaddleOcrEngine(BaseEngine):
         """返回PaddleOCR引擎支持的文件扩展名"""
         return [".pdf"]
 
-    async def convert(self, file_path: str) -> str:
+    async def convert(self, file_path: str, file_id: str | None = None) -> str:
         """
         异步转换PDF为Markdown文本
 

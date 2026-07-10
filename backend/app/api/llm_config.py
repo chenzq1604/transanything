@@ -183,29 +183,18 @@ async def test_llm_vision():
         from app.llm.client import get_llm_client
         llm = get_llm_client()
 
-        # 生成一个最小的1x1白色PNG图片
-        import struct
-        import zlib
+        # 生成64x64白色PNG测试图片（部分模型要求最小14像素）
+        from io import BytesIO
+        from PIL import Image
 
-        def create_minimal_png():
-            """创建最小的1x1白色PNG图片的base64编码"""
-            # PNG签名
-            signature = b'\x89PNG\r\n\x1a\n'
-            # IHDR chunk: 1x1, 8-bit RGB
-            ihdr_data = struct.pack('>IIBBBBB', 1, 1, 8, 2, 0, 0, 0)
-            ihdr_crc = zlib.crc32(b'IHDR' + ihdr_data) & 0xffffffff
-            ihdr = struct.pack('>I', 13) + b'IHDR' + ihdr_data + struct.pack('>I', ihdr_crc)
-            # IDAT chunk: 单个白色像素
-            raw_data = b'\x00\xff\xff\xff'  # filter byte + RGB
-            compressed = zlib.compress(raw_data)
-            idat_crc = zlib.crc32(b'IDAT' + compressed) & 0xffffffff
-            idat = struct.pack('>I', len(compressed)) + b'IDAT' + compressed + struct.pack('>I', idat_crc)
-            # IEND chunk
-            iend_crc = zlib.crc32(b'IEND') & 0xffffffff
-            iend = struct.pack('>I', 0) + b'IEND' + struct.pack('>I', iend_crc)
-            return base64.b64encode(signature + ihdr + idat + iend).decode('utf-8')
+        def create_test_png():
+            """创建64x64白色PNG图片的base64编码"""
+            img = Image.new("RGB", (64, 64), (255, 255, 255))
+            buf = BytesIO()
+            img.save(buf, format="PNG")
+            return base64.b64encode(buf.getvalue()).decode("utf-8")
 
-        img_b64 = create_minimal_png()
+        img_b64 = create_test_png()
 
         # 尝试发送图片识别请求
         try:

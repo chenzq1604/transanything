@@ -68,7 +68,7 @@ class PdfEngine(BaseEngine):
         """返回PDF引擎支持的扩展名"""
         return [".pdf"]
 
-    async def convert(self, file_path: str) -> str:
+    async def convert(self, file_path: str, file_id: str | None = None) -> str:
         """
         将PDF文件转换为Markdown格式（异步包装）
 
